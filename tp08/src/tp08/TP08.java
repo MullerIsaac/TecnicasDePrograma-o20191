@@ -19,6 +19,7 @@ public class TP08 {
         
         banco.cadastrar(new Conta("123456-A"));
         banco.creditar("123456-A", 1000);
+        
         banco.cadastrar(new ContaImposto("654321-A"));
         banco.creditar("654321-A", 50);
         auditor.auditar(banco);  
