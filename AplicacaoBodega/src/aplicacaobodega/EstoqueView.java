@@ -18,6 +18,9 @@ public class EstoqueView extends javax.swing.JFrame {
     EstoqueArrayList estoque = new EstoqueArrayList();
     Bodega bodega = new Bodega(estoque);
     ArrayList<Produto> listaProdutos = new ArrayList();
+    IncluirProdutoView recebeInstancia;
+    
+    private boolean venda = true;
     
     
     public EstoqueView() {
@@ -40,6 +43,8 @@ public class EstoqueView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTree1 = new javax.swing.JTree();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbProdutos = new javax.swing.JTable();
@@ -49,8 +54,13 @@ public class EstoqueView extends javax.swing.JFrame {
         btAdicionar = new javax.swing.JButton();
         btAtualizar = new javax.swing.JButton();
         btProdutosEmFalta = new javax.swing.JButton();
+        jtQnt = new javax.swing.JTextField();
+        jbConfirmar = new javax.swing.JButton();
+        jbCancelar = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         mnSobre = new javax.swing.JMenu();
+
+        jScrollPane2.setViewportView(jTree1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Estoque");
@@ -93,16 +103,31 @@ public class EstoqueView extends javax.swing.JFrame {
             tbProdutos.getColumnModel().getColumn(3).setPreferredWidth(20);
         }
 
-        btEstocar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/18x18/Create.png"))); // NOI18N
+        btEstocar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacaobodega/Create.png"))); // NOI18N
         btEstocar.setText("Estocar");
+        btEstocar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btEstocarMouseClicked(evt);
+            }
+        });
 
-        btVender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/18x18/Euro.png"))); // NOI18N
+        btVender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacaobodega/Euro.png"))); // NOI18N
         btVender.setText("Vender");
+        btVender.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btVenderMouseClicked(evt);
+            }
+        });
 
-        btRemover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/18x18/Delete.png"))); // NOI18N
+        btRemover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacaobodega/Delete.png"))); // NOI18N
         btRemover.setText("Remover");
+        btRemover.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btRemoverMouseClicked(evt);
+            }
+        });
 
-        btAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/18x18/Add.png"))); // NOI18N
+        btAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacaobodega/Add.png"))); // NOI18N
         btAdicionar.setText("Adicionar");
         btAdicionar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -110,18 +135,36 @@ public class EstoqueView extends javax.swing.JFrame {
             }
         });
 
-        btAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/18x18/Redo.png"))); // NOI18N
+        btAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacaobodega/Redo.png"))); // NOI18N
         btAtualizar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btAtualizarMouseClicked(evt);
             }
         });
 
-        btProdutosEmFalta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/18x18/3d bar chart.png"))); // NOI18N
+        btProdutosEmFalta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacaobodega/3d bar chart.png"))); // NOI18N
         btProdutosEmFalta.setText(" Produtos em Falta");
         btProdutosEmFalta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btProdutosEmFaltaMouseClicked(evt);
+            }
+        });
+
+        jtQnt.setEnabled(false);
+
+        jbConfirmar.setText("Ok");
+        jbConfirmar.setEnabled(false);
+        jbConfirmar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jbConfirmarMouseClicked(evt);
+            }
+        });
+
+        jbCancelar.setText("Cancelar");
+        jbCancelar.setEnabled(false);
+        jbCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jbCancelarMouseClicked(evt);
             }
         });
 
@@ -132,18 +175,22 @@ public class EstoqueView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btEstocar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btVender, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtQnt, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jbConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btEstocar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btVender, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btProdutosEmFalta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -157,13 +204,17 @@ public class EstoqueView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btProdutosEmFalta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btProdutosEmFalta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btVender)
+                        .addComponent(btEstocar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btEstocar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btVender)
                     .addComponent(btAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtQnt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbConfirmar)
+                    .addComponent(jbCancelar))
                 .addGap(20, 20, 20))
         );
 
@@ -207,8 +258,47 @@ public class EstoqueView extends javax.swing.JFrame {
     }//GEN-LAST:event_mnSobreMouseClicked
 
     private void btAdicionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btAdicionarMouseClicked
-        new IncluirProdutoView().setVisible(true);
+        if(recebeInstancia == null){
+            recebeInstancia = new IncluirProdutoView(EstoqueView.this);
+            recebeInstancia.setVisible(true);
+            recebeInstancia.recebeEstoque(estoque);
+        }else{
+            recebeInstancia.setVisible(true);
+            recebeInstancia.recebeEstoque(estoque);
+        }
     }//GEN-LAST:event_btAdicionarMouseClicked
+
+    private void btRemoverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btRemoverMouseClicked
+        int row = tbProdutos.getSelectedRow();
+        String cod = (String) tbProdutos.getValueAt(row, 0);
+        bodega.removerProduto(cod);
+        carregarEstoque();
+    }//GEN-LAST:event_btRemoverMouseClicked
+
+    private void btEstocarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEstocarMouseClicked
+        prepararVendaEstoca(false);
+    }//GEN-LAST:event_btEstocarMouseClicked
+
+    private void jbCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbCancelarMouseClicked
+        Cancela();
+    }//GEN-LAST:event_jbCancelarMouseClicked
+
+    private void btVenderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btVenderMouseClicked
+        prepararVendaEstoca(true);
+    }//GEN-LAST:event_btVenderMouseClicked
+
+    private void jbConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbConfirmarMouseClicked
+        int row = tbProdutos.getSelectedRow();
+        String cod = (String) tbProdutos.getValueAt(row, 0);
+        int qnt = Integer.parseInt(jtQnt.getText());
+        if(venda){
+            bodega.venderProduto(cod, qnt);
+        }else{
+            bodega.estocarProduto(cod, qnt);
+        }
+        carregarEstoque();
+        Cancela();
+    }//GEN-LAST:event_jbConfirmarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -278,9 +368,30 @@ public class EstoqueView extends javax.swing.JFrame {
         }
     }
     
-    public EstoqueArrayList getEstoque(){
-        return estoque;
+    public void prepararVendaEstoca(boolean op){
+        btAdicionar.setEnabled(false);
+        btAtualizar.setEnabled(false);
+        btProdutosEmFalta.setEnabled(false);
+        btRemover.setEnabled(false);
+        jtQnt.setEnabled(true);
+        jbCancelar.setEnabled(true);
+        jbConfirmar.setEnabled(true);
+        jtQnt.requestFocus(true);
+        this.venda = op;
     }
+    
+    public void Cancela(){
+        btAdicionar.setEnabled(true);
+        btAtualizar.setEnabled(true);
+        btProdutosEmFalta.setEnabled(true);
+        btRemover.setEnabled(true);
+        jtQnt.setEnabled(false);
+        jbCancelar.setEnabled(false);
+        jbConfirmar.setEnabled(false);
+        jtQnt.requestFocus(false);
+        jtQnt.setText("");
+    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btAdicionar;
@@ -292,6 +403,11 @@ public class EstoqueView extends javax.swing.JFrame {
     public javax.swing.JMenuBar jMenuBar2;
     public javax.swing.JPanel jPanel1;
     public javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JScrollPane jScrollPane2;
+    public javax.swing.JTree jTree1;
+    public javax.swing.JButton jbCancelar;
+    public javax.swing.JButton jbConfirmar;
+    public javax.swing.JTextField jtQnt;
     public javax.swing.JMenu mnSobre;
     public javax.swing.JTable tbProdutos;
     // End of variables declaration//GEN-END:variables
