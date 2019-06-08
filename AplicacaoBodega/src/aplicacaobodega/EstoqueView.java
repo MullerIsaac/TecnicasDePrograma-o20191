@@ -8,6 +8,8 @@ package aplicacaobodega;
 import Classes.Bodega;
 import Classes.EstoqueArrayList;
 import Classes.Produto;
+import Classes.ProdutoPerecivel;
+import Excecoes.PNEException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -26,14 +28,9 @@ public class EstoqueView extends javax.swing.JFrame {
     public EstoqueView() {
         initComponents();
         carregarEstoque();
-        Produto prd = new Produto("1000");
-        prd.setNome("Arroz");
-        prd.setPreco(20.00);
-        prd.setQuantidade(20);
-        bodega.adicionarProduto(prd);
         
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -67,20 +64,20 @@ public class EstoqueView extends javax.swing.JFrame {
 
         tbProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Código", "Nome do Produto", "Preço (Em R$)", "Em Estoque"
+                "Código", "Nome do Produto", "Preço (Em R$)", "Em Estoque", "Validade"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -91,16 +88,19 @@ public class EstoqueView extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tbProdutos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tbProdutos);
         if (tbProdutos.getColumnModel().getColumnCount() > 0) {
             tbProdutos.getColumnModel().getColumn(0).setResizable(false);
-            tbProdutos.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tbProdutos.getColumnModel().getColumn(0).setPreferredWidth(5);
             tbProdutos.getColumnModel().getColumn(1).setResizable(false);
-            tbProdutos.getColumnModel().getColumn(1).setPreferredWidth(80);
+            tbProdutos.getColumnModel().getColumn(1).setPreferredWidth(100);
             tbProdutos.getColumnModel().getColumn(2).setResizable(false);
-            tbProdutos.getColumnModel().getColumn(2).setPreferredWidth(20);
+            tbProdutos.getColumnModel().getColumn(2).setPreferredWidth(5);
             tbProdutos.getColumnModel().getColumn(3).setResizable(false);
-            tbProdutos.getColumnModel().getColumn(3).setPreferredWidth(20);
+            tbProdutos.getColumnModel().getColumn(3).setPreferredWidth(5);
+            tbProdutos.getColumnModel().getColumn(4).setResizable(false);
+            tbProdutos.getColumnModel().getColumn(4).setPreferredWidth(10);
         }
 
         btEstocar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacaobodega/Create.png"))); // NOI18N
@@ -261,17 +261,22 @@ public class EstoqueView extends javax.swing.JFrame {
         if(recebeInstancia == null){
             recebeInstancia = new IncluirProdutoView(EstoqueView.this);
             recebeInstancia.setVisible(true);
-            recebeInstancia.recebeEstoque(estoque);
+            recebeInstancia.recebeEstoque(bodega);
         }else{
             recebeInstancia.setVisible(true);
-            recebeInstancia.recebeEstoque(estoque);
+            recebeInstancia.recebeEstoque(bodega);
         }
     }//GEN-LAST:event_btAdicionarMouseClicked
 
     private void btRemoverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btRemoverMouseClicked
         int row = tbProdutos.getSelectedRow();
         String cod = (String) tbProdutos.getValueAt(row, 0);
-        bodega.removerProduto(cod);
+        try{
+            bodega.removerProduto(cod);
+        }catch(PNEException e){
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro",  JOptionPane.ERROR_MESSAGE);
+        }
+        
         carregarEstoque();
     }//GEN-LAST:event_btRemoverMouseClicked
 
@@ -291,10 +296,14 @@ public class EstoqueView extends javax.swing.JFrame {
         int row = tbProdutos.getSelectedRow();
         String cod = (String) tbProdutos.getValueAt(row, 0);
         int qnt = Integer.parseInt(jtQnt.getText());
-        if(venda){
-            bodega.venderProduto(cod, qnt);
-        }else{
-            bodega.estocarProduto(cod, qnt);
+        try{
+            if(venda){
+                bodega.venderProduto(cod, qnt);
+            }else{
+                bodega.estocarProduto(cod, qnt);
+            }
+        }catch(PNEException e){
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro",  JOptionPane.ERROR_MESSAGE);
         }
         carregarEstoque();
         Cancela();
@@ -344,12 +353,24 @@ public class EstoqueView extends javax.swing.JFrame {
         modelo.setNumRows(0);
         int cont = listaProdutos.size();
         for(int i = 0; i<cont; i++){
-            modelo.addRow(new Object[]{
-                listaProdutos.get(i).getCodigo(),
-                listaProdutos.get(i).getNome(),
-                listaProdutos.get(i).getPreco(),
-                listaProdutos.get(i).getQuantidade(),
-            });
+            if(listaProdutos.get(i) instanceof ProdutoPerecivel){
+                ProdutoPerecivel p = (ProdutoPerecivel)listaProdutos.get(i);
+                modelo.addRow(new Object[]{
+                    p.getCodigo(),
+                    p.getNome(),
+                    p.getPreco(),
+                    p.getQuantidade(),
+                    p.getValidade()
+                });
+            }else{
+                modelo.addRow(new Object[]{
+                    listaProdutos.get(i).getCodigo(),
+                    listaProdutos.get(i).getNome(),
+                    listaProdutos.get(i).getPreco(),
+                    listaProdutos.get(i).getQuantidade(),
+                });
+            }
+            
         }
     }
     public void carregarProdutosEmFalta(){
@@ -359,12 +380,24 @@ public class EstoqueView extends javax.swing.JFrame {
         modelo.setNumRows(0);
         int cont = listaProdutos.size();
         for(int i = 0; i<cont; i++){
-            modelo.addRow(new Object[]{
-                listaProdutos.get(i).getCodigo(),
-                listaProdutos.get(i).getNome(),
-                listaProdutos.get(i).getPreco(),
-                listaProdutos.get(i).getQuantidade(),
-            });
+            if(listaProdutos.get(i) instanceof ProdutoPerecivel){
+                ProdutoPerecivel p = (ProdutoPerecivel) listaProdutos.get(i);
+                
+                modelo.addRow(new Object[]{
+                    p.getCodigo(),
+                    p.getNome(),
+                    p.getPreco(),
+                    p.getQuantidade(), 
+                 p.getValidade(),
+                });
+            }else{
+                modelo.addRow(new Object[]{
+                    listaProdutos.get(i).getCodigo(),
+                    listaProdutos.get(i).getNome(),
+                    listaProdutos.get(i).getPreco(),
+                    listaProdutos.get(i).getQuantidade(),
+                });
+            }
         }
     }
     

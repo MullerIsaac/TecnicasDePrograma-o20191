@@ -1,6 +1,8 @@
 
 package Classes;
 
+import Excecoes.PJCException;
+import Excecoes.PNEException;
 import Interfaces.IEstoque;
 import java.util.ArrayList;
 
@@ -12,8 +14,12 @@ public class EstoqueArrayList implements IEstoque{
     }
 
     @Override
-    public void adicionar(Produto produto) {
-        produtos.add(produto);
+    public void adicionar(Produto produto) throws PJCException {
+        Produto aux = buscar(produto.getCodigo());
+        if(aux == null)
+            produtos.add(produto);
+        else
+            throw new PJCException(produto.getCodigo());
     }
 
     @Override
